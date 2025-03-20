@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Leavitt’s Diamond Challenge</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    h1 {
+      font-size: 32px;
+    }
+    .game-title {
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+    }
+    p {
+      line-height: 1.6;
+    }
+    .task {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .drag-container, .drop-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .draggable {
+      margin: 5px;
+      padding: 8px;
+      background-color: #e0e0e0;
+      border: 1px solid #999;
+      border-radius: 4px;
+      cursor: grab;
+    }
+    .dropzone {
+      margin: 5px;
+      padding: 15px;
+      background-color: #f0f0f0;
+      border: 2px dashed #bbb;
+      border-radius: 4px;
+      min-width: 220px;
+      min-height: 40px;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 5px 0;
+      padding: 8px;
+      background-color: #e0e0e0;
+      border: 1px solid #999;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .section-summary {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #eef;
+      border: 1px solid #99f;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Introduction Page -->
+    <div id="page-intro">
+      <h1>LSST LEARNING GAMES</h1>
+      <h2>By Shan Wikoon</h2>
+      <div class="game-title">LEAVITT’S DIAMOND CHALLENGE</div>
+      <p>
+        Welcome to the Leavitt’s Diamond Challenge. In this game, you will guide a traditional local bakery through a digital transformation.
+        The bakery is introducing an <strong>Online Ordering</strong> system, a <strong>Delivery Service</strong>, a <strong>CRM System</strong>, and a <strong>Semi-Automated Kitchen</strong>.
+      </p>
+      <p>
+        Leavitt’s Diamond Model comprises four interdependent components that must work in harmony during change:
+      </p>
+      <ul>
+        <li><strong>People:</strong> Engaging and upskilling staff to adopt new digital tools.</li>
+        <li><strong>Structure:</strong> Adapting the organisation to integrate new roles and workflows.</li>
+        <li><strong>Technology:</strong> Selecting and implementing digital tools that drive efficiency.</li>
+        <li><strong>Processes:</strong> Revising operational procedures to leverage the new system.</li>
+      </ul>
+      <p>
+        In this challenge you will complete four sections – one for each component – with each section containing four tasks. Two tasks are drag‐and‐drop matching and two are multiple choice questions. Correct answers earn <strong>+10 points</strong> and incorrect answers incur <strong>–5 points</strong>. After each section you will receive detailed feedback before proceeding.
+      </p>
+      <button onclick="startGame()">Start Challenge</button>
+    </div>
+    
+    <!-- People Section -->
+    <div id="page-people" class="hidden">
+      <h2>People Section</h2>
+      <p><em>Scenario: The bakery must ensure its team is prepared for digital change by upskilling staff and improving communication.</em></p>
+      <!-- Task 1: Drag-and-Drop Matching -->
+      <div class="task" id="people-task1">
+        <h3>Task 1: Match HR Practices & Training Tools</h3>
+        <p>Drag each HR tool to the corresponding challenge:</p>
+        <div class="drag-container" id="people-task1-draggables"></div>
+        <div class="drop-container" id="people-task1-dropzones"></div>
+        <div class="feedback" id="people-task1-feedback"></div>
+      </div>
+      <!-- Task 2: Multiple Choice -->
+      <div class="task" id="people-task2">
+        <h3>Task 2: Digital Training Benefit</h3>
+        <p>What is the immediate benefit of launching a digital training programme for bakery staff?</p>
+        <ul class="options" id="people-task2-options"></ul>
+        <div class="feedback" id="people-task2-feedback"></div>
+      </div>
+      <!-- Task 3: Drag-and-Drop Matching -->
+      <div class="task" id="people-task3">
+        <h3>Task 3: Match Communication Tools</h3>
+        <p>Drag each communication tool to its benefit:</p>
+        <div class="drag-container" id="people-task3-draggables"></div>
+        <div class="drop-container" id="people-task3-dropzones"></div>
+        <div class="feedback" id="people-task3-feedback"></div>
+      </div>
+      <!-- Task 4: Multiple Choice -->
+      <div class="task" id="people-task4">
+        <h3>Task 4: Consequence of Poor People Management</h3>
+        <p>What could be a consequence of poor people management during the transformation?</p>
+        <ul class="options" id="people-task4-options"></ul>
+        <div class="feedback" id="people-task4-feedback"></div>
+      </div>
+      <button onclick="submitSection('people')">Submit All Tasks</button>
+      <div id="people-section-summary" class="section-summary hidden"></div>
+      <button id="people-next-btn" class="hidden" onclick="goToNextSection('people')">Next Section</button>
+    </div>
+    
+    <!-- Structure Section -->
+    <div id="page-structure" class="hidden">
+      <h2>Structure Section</h2>
+      <p><em>Scenario: The bakery must reorganise its structure to integrate digital tools and streamline workflows.</em></p>
+      <!-- Task 1: Drag-and-Drop Matching -->
+      <div class="task" id="structure-task1">
+        <h3>Task 1: Match Organisational Design Choices</h3>
+        <p>Drag each design choice to its benefit:</p>
+        <div class="drag-container" id="structure-task1-draggables"></div>
+        <div class="drop-container" id="structure-task1-dropzones"></div>
+        <div class="feedback" id="structure-task1-feedback"></div>
+      </div>
+      <!-- Task 2: Multiple Choice -->
+      <div class="task" id="structure-task2">
+        <h3>Task 2: Effect of Reorganising Teams</h3>
+        <p>What is the immediate effect of reorganising teams to support the new digital system?</p>
+        <ul class="options" id="structure-task2-options"></ul>
+        <div class="feedback" id="structure-task2-feedback"></div>
+      </div>
+      <!-- Task 3: Drag-and-Drop Matching -->
+      <div class="task" id="structure-task3">
+        <h3>Task 3: Match Coordination Tools</h3>
+        <p>Drag each coordination tool to its role:</p>
+        <div class="drag-container" id="structure-task3-draggables"></div>
+        <div class="drop-container" id="structure-task3-dropzones"></div>
+        <div class="feedback" id="structure-task3-feedback"></div>
+      </div>
+      <!-- Task 4: Multiple Choice -->
+      <div class="task" id="structure-task4">
+        <h3>Task 4: Risk of Old Structure</h3>
+        <p>What is a potential risk if the bakery maintains its old structure during digital transformation?</p>
+        <ul class="options" id="structure-task4-options"></ul>
+        <div class="feedback" id="structure-task4-feedback"></div>
+      </div>
+      <button onclick="submitSection('structure')">Submit All Tasks</button>
+      <div id="structure-section-summary" class="section-summary hidden"></div>
+      <button id="structure-next-btn" class="hidden" onclick="goToNextSection('structure')">Next Section</button>
+    </div>
+    
+    <!-- Technology Section -->
+    <div id="page-technology" class="hidden">
+      <h2>Technology Section</h2>
+      <p><em>Scenario: The bakery is selecting digital tools—from an online ordering platform to a CRM system—to drive its transformation.</em></p>
+      <!-- Task 1: Drag-and-Drop Matching -->
+      <div class="task" id="technology-task1">
+        <h3>Task 1: Match Digital Tools</h3>
+        <p>Drag each digital tool to the operational challenge it addresses:</p>
+        <div class="drag-container" id="technology-task1-draggables"></div>
+        <div class="drop-container" id="technology-task1-dropzones"></div>
+        <div class="feedback" id="technology-task1-feedback"></div>
+      </div>
+      <!-- Task 2: Multiple Choice -->
+      <div class="task" id="technology-task2">
+        <h3>Task 2: Benefit of a CRM System</h3>
+        <p>What is the immediate benefit of implementing a CRM system at the bakery?</p>
+        <ul class="options" id="technology-task2-options"></ul>
+        <div class="feedback" id="technology-task2-feedback"></div>
+      </div>
+      <!-- Task 3: Drag-and-Drop Matching -->
+      <div class="task" id="technology-task3">
+        <h3>Task 3: Match Tech Solutions to Outcomes</h3>
+        <p>Drag each technological solution to its long-term outcome:</p>
+        <div class="drag-container" id="technology-task3-draggables"></div>
+        <div class="drop-container" id="technology-task3-dropzones"></div>
+        <div class="feedback" id="technology-task3-feedback"></div>
+      </div>
+      <!-- Task 4: Multiple Choice -->
+      <div class="task" id="technology-task4">
+        <h3>Task 4: Consequence of Not Updating Tech</h3>
+        <p>What might be the consequence if the bakery's technology is not updated regularly?</p>
+        <ul class="options" id="technology-task4-options"></ul>
+        <div class="feedback" id="technology-task4-feedback"></div>
+      </div>
+      <button onclick="submitSection('technology')">Submit All Tasks</button>
+      <div id="technology-section-summary" class="section-summary hidden"></div>
+      <button id="technology-next-btn" class="hidden" onclick="goToNextSection('technology')">Next Section</button>
+    </div>
+    
+    <!-- Processes Section -->
+    <div id="page-processes" class="hidden">
+      <h2>Processes Section</h2>
+      <p><em>Scenario: To fully benefit from digital change, the bakery must update its operational processes.</em></p>
+      <!-- Task 1: Drag-and-Drop Matching -->
+      <div class="task" id="processes-task1">
+        <h3>Task 1: Match Process Improvement Initiatives</h3>
+        <p>Drag each initiative to the operational challenge it addresses:</p>
+        <div class="drag-container" id="processes-task1-draggables"></div>
+        <div class="drop-container" id="processes-task1-dropzones"></div>
+        <div class="feedback" id="processes-task1-feedback"></div>
+      </div>
+      <!-- Task 2: Multiple Choice -->
+      <div class="task" id="processes-task2">
+        <h3>Task 2: Benefit of Production Automation</h3>
+        <p>What is the immediate benefit of automating part of the bakery’s production process?</p>
+        <ul class="options" id="processes-task2-options"></ul>
+        <div class="feedback" id="processes-task2-feedback"></div>
+      </div>
+      <!-- Task 3: Drag-and-Drop Matching -->
+      <div class="task" id="processes-task3">
+        <h3>Task 3: Match Process Tools</h3>
+        <p>Drag each process tool to its benefit in streamlining operations:</p>
+        <div class="drag-container" id="processes-task3-draggables"></div>
+        <div class="drop-container" id="processes-task3-dropzones"></div>
+        <div class="feedback" id="processes-task3-feedback"></div>
+      </div>
+      <!-- Task 4: Multiple Choice -->
+      <div class="task" id="processes-task4">
+        <h3>Task 4: Long-term Consequence of Inefficient Processes</h3>
+        <p>What is a long-term consequence of inefficient operational processes in the bakery?</p>
+        <ul class="options" id="processes-task4-options"></ul>
+        <div class="feedback" id="processes-task4-feedback"></div>
+      </div>
+      <button onclick="submitSection('processes')">Submit All Tasks</button>
+      <div id="processes-section-summary" class="section-summary hidden"></div>
+      <button id="processes-next-btn" class="hidden" onclick="goToNextSection('processes')">View Final Score</button>
+    </div>
+    
+    <!-- Final Score Page -->
+    <div id="page-final" class="hidden">
+      <h2>Final Score</h2>
+      <p id="final-score"></p>
+      <p id="final-feedback"></p>
+      <button onclick="restartGame()">Restart Game</button>
+    </div>
+  </div>
+  
+  <script>
+    let totalScore = 0;
+    
+    // Data for each section based on the bakery scenario
+    const gameData = {
+      people: {
+        task1: {
+          draggables: [
+            { id: 'p1_item1', text: 'Transformational Leadership', match: 'Inspires staff to embrace change' },
+            { id: 'p1_item2', text: 'Digital Onboarding Module', match: 'Helps new staff learn the online ordering system' },
+            { id: 'p1_item3', text: 'Performance Feedback Software', match: 'Provides data-driven insights on staff performance' },
+            { id: 'p1_item4', text: 'Employee Engagement Survey', match: 'Measures staff morale during transformation' }
+          ],
+          dropzones: [
+            { id: 'p1_zone1', text: 'Inspires staff to embrace change' },
+            { id: 'p1_zone2', text: 'Helps new staff learn the online ordering system' },
+            { id: 'p1_zone3', text: 'Provides data-driven insights on staff performance' },
+            { id: 'p1_zone4', text: 'Measures staff morale during transformation' }
+          ]
+        },
+        task2: {
+          question: "What is the immediate benefit of launching a digital training programme for bakery staff?",
+          options: [
+            { text: "Rapid upskilling on online ordering and CRM systems", correct: true },
+            { text: "Increased operational complexity", correct: false },
+            { text: "Higher wage costs", correct: false },
+            { text: "Slower customer service response", correct: false }
+          ]
+        },
+        task3: {
+          draggables: [
+            { id: 'p3_item1', text: 'Internal Messaging App', match: 'Facilitates real-time team coordination' },
+            { id: 'p3_item2', text: 'Video Conferencing', match: 'Enables remote meetings for planning delivery routes' },
+            { id: 'p3_item3', text: 'Digital Bulletin Board', match: 'Keeps staff informed of daily updates and menu changes' },
+            { id: 'p3_item4', text: 'Email Alerts', match: 'Delivers important announcements promptly' }
+          ],
+          dropzones: [
+            { id: 'p3_zone1', text: 'Facilitates real-time team coordination' },
+            { id: 'p3_zone2', text: 'Enables remote meetings for planning delivery routes' },
+            { id: 'p3_zone3', text: 'Keeps staff informed of daily updates and menu changes' },
+            { id: 'p3_zone4', text: 'Delivers important announcements promptly' }
+          ]
+        },
+        task4: {
+          question: "What could be a consequence of poor people management during the transformation?",
+          options: [
+            { text: "Enhanced teamwork", correct: false },
+            { text: "Increased resistance to change", correct: true },
+            { text: "Higher product quality", correct: false },
+            { text: "Reduced training costs", correct: false }
+          ]
+        }
+      },
+      structure: {
+        task1: {
+          draggables: [
+            { id: 's1_item1', text: 'Flat Organisational Structure', match: 'Enables quick decision-making and agile responses' },
+            { id: 's1_item2', text: 'Dedicated Digital Manager Role', match: 'Oversees implementation of online systems' },
+            { id: 's1_item3', text: 'Team-based Structure', match: 'Fosters collaboration between kitchen staff and delivery teams' },
+            { id: 's1_item4', text: 'Centralised Coordination', match: 'Ensures consistent customer service via the CRM system' }
+          ],
+          dropzones: [
+            { id: 's1_zone1', text: 'Enables quick decision-making and agile responses' },
+            { id: 's1_zone2', text: 'Oversees implementation of online systems' },
+            { id: 's1_zone3', text: 'Fosters collaboration between kitchen staff and delivery teams' },
+            { id: 's1_zone4', text: 'Ensures consistent customer service via the CRM system' }
+          ]
+        },
+        task2: {
+          question: "What is the immediate effect of reorganising teams to support the new digital system?",
+          options: [
+            { text: "Enhanced cross-functional collaboration", correct: true },
+            { text: "Increased hierarchy and bureaucracy", correct: false },
+            { text: "Confusion over roles", correct: false },
+            { text: "Reduced customer focus", correct: false }
+          ]
+        },
+        task3: {
+          draggables: [
+            { id: 's3_item1', text: 'Project Management Software', match: 'Streamlines scheduling between kitchen and delivery teams' },
+            { id: 's3_item2', text: 'Digital Workflow Charts', match: 'Clarifies new role responsibilities and processes' },
+            { id: 's3_item3', text: 'Centralised Communication Hub', match: 'Ensures all staff receive up-to-date information' },
+            { id: 's3_item4', text: 'Role Redefinition Meetings', match: 'Fosters alignment on new digital tasks' }
+          ],
+          dropzones: [
+            { id: 's3_zone1', text: 'Streamlines scheduling between kitchen and delivery teams' },
+            { id: 's3_zone2', text: 'Clarifies new role responsibilities and processes' },
+            { id: 's3_zone3', text: 'Ensures all staff receive up-to-date information' },
+            { id: 's3_zone4', text: 'Fosters alignment on new digital tasks' }
+          ]
+        },
+        task4: {
+          question: "What is a potential risk if the bakery maintains its old structure during digital transformation?",
+          options: [
+            { text: "Reduced innovation", correct: true },
+            { text: "Improved operational efficiency", correct: false },
+            { text: "Faster decision-making", correct: false },
+            { text: "Better customer service", correct: false }
+          ]
+        }
+      },
+      technology: {
+        task1: {
+          draggables: [
+            { id: 't1_item1', text: 'Online Ordering Platform', match: 'Simplifies the customer ordering process' },
+            { id: 't1_item2', text: 'Delivery Management System', match: 'Optimises local delivery logistics' },
+            { id: 't1_item3', text: 'CRM System', match: 'Tracks customer preferences and loyalty' },
+            { id: 't1_item4', text: 'Semi-Automated Kitchen Equipment', match: 'Improves production consistency and speed' }
+          ],
+          dropzones: [
+            { id: 't1_zone1', text: 'Simplifies the customer ordering process' },
+            { id: 't1_zone2', text: 'Optimises local delivery logistics' },
+            { id: 't1_zone3', text: 'Tracks customer preferences and loyalty' },
+            { id: 't1_zone4', text: 'Improves production consistency and speed' }
+          ]
+        },
+        task2: {
+          question: "What is the immediate benefit of implementing a CRM system at the bakery?",
+          options: [
+            { text: "Accelerated information sharing", correct: true },
+            { text: "Increased manual data entry", correct: false },
+            { text: "Higher operational costs", correct: false },
+            { text: "Reduced customer engagement", correct: false }
+          ]
+        },
+        task3: {
+          draggables: [
+            { id: 't3_item1', text: 'Cloud-Based Systems', match: 'Enables scalability and remote access for online orders' },
+            { id: 't3_item2', text: 'Data Analytics Software', match: 'Provides insights for menu optimisation and promotions' },
+            { id: 't3_item3', text: 'Cybersecurity Measures', match: 'Protects customer data and transactional information' },
+            { id: 't3_item4', text: 'Kitchen Automation Software', match: 'Improves production efficiency over time' }
+          ],
+          dropzones: [
+            { id: 't3_zone1', text: 'Enables scalability and remote access for online orders' },
+            { id: 't3_zone2', text: 'Provides insights for menu optimisation and promotions' },
+            { id: 't3_zone3', text: 'Protects customer data and transactional information' },
+            { id: 't3_zone4', text: 'Improves production efficiency over time' }
+          ]
+        },
+        task4: {
+          question: "What might be the consequence if the bakery's technology is not updated regularly?",
+          options: [
+            { text: "Competitive disadvantage", correct: true },
+            { text: "Improved operational efficiency", correct: false },
+            { text: "Increased customer satisfaction", correct: false },
+            { text: "Enhanced production quality", correct: false }
+          ]
+        }
+      },
+      processes: {
+        task1: {
+          draggables: [
+            { id: 'pr1_item1', text: 'Lean Methodologies', match: 'Reduces waste in production and improves quality' },
+            { id: 'pr1_item2', text: 'Agile Workflow Reorganisation', match: 'Enables quick adaptation to customer demand' },
+            { id: 'pr1_item3', text: 'Standard Operating Procedures (SOP) Revision', match: 'Ensures consistency in order fulfilment' },
+            { id: 'pr1_item4', text: 'Process Reengineering', match: 'Overhauls outdated kitchen practices' }
+          ],
+          dropzones: [
+            { id: 'pr1_zone1', text: 'Reduces waste in production and improves quality' },
+            { id: 'pr1_zone2', text: 'Enables quick adaptation to customer demand' },
+            { id: 'pr1_zone3', text: 'Ensures consistency in order fulfilment' },
+            { id: 'pr1_zone4', text: 'Overhauls outdated kitchen practices' }
+          ]
+        },
+        task2: {
+          question: "What is the immediate benefit of automating part of the bakery’s production process?",
+          options: [
+            { text: "Faster task completion", correct: true },
+            { text: "Increased manual error", correct: false },
+            { text: "Reduced product quality", correct: false },
+            { text: "Slower service delivery", correct: false }
+          ]
+        },
+        task3: {
+          draggables: [
+            { id: 'pr3_item1', text: 'Workflow Management System', match: 'Optimises order scheduling and tracking' },
+            { id: 'pr3_item2', text: 'Digital Queue Management', match: 'Improves customer waiting time management' },
+            { id: 'pr3_item3', text: 'Online Reservation System', match: 'Simplifies customer booking for pick-up or dine-in' },
+            { id: 'pr3_item4', text: 'Collaborative Scheduling Software', match: 'Enhances coordination between production and delivery' }
+          ],
+          dropzones: [
+            { id: 'pr3_zone1', text: 'Optimises order scheduling and tracking' },
+            { id: 'pr3_zone2', text: 'Improves customer waiting time management' },
+            { id: 'pr3_zone3', text: 'Simplifies customer booking for pick-up or dine-in' },
+            { id: 'pr3_zone4', text: 'Enhances coordination between production and delivery' }
+          ]
+        },
+        task4: {
+          question: "What is a long-term consequence of inefficient operational processes in the bakery?",
+          options: [
+            { text: "Accumulated operational inefficiencies", correct: true },
+            { text: "Sustained competitive advantage", correct: false },
+            { text: "Increased customer satisfaction", correct: false },
+            { text: "Improved staff morale", correct: false }
+          ]
+        }
+      }
+    };
+    
+    // Utility function to shuffle an array
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+    
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.container > div');
+      pages.forEach(page => {
+        if (page.id === pageId) {
+          page.classList.remove('hidden');
+        } else {
+          page.classList.add('hidden');
+        }
+      });
+    }
+    
+    function startGame() {
+      totalScore = 0;
+      initPeoplePage();
+      showPage('page-people');
+    }
+    
+    // PEOPLE SECTION INITIALISATION
+    function initPeoplePage() {
+      // Task 1
+      const task1 = gameData.people.task1;
+      const dragCont1 = document.getElementById('people-task1-draggables');
+      const dropCont1 = document.getElementById('people-task1-dropzones');
+      dragCont1.innerHTML = '';
+      dropCont1.innerHTML = '';
+      let items1 = shuffle([...task1.draggables]);
+      items1.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont1.appendChild(div);
+      });
+      let zones1 = shuffle([...task1.dropzones]);
+      zones1.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont1.appendChild(div);
+      });
+      
+      // Task 2
+      const task2 = gameData.people.task2;
+      const options2 = document.getElementById('people-task2-options');
+      options2.innerHTML = '';
+      let opts2 = shuffle([...task2.options]);
+      opts2.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options2.appendChild(li);
+      });
+      
+      // Task 3
+      const task3 = gameData.people.task3;
+      const dragCont3 = document.getElementById('people-task3-draggables');
+      const dropCont3 = document.getElementById('people-task3-dropzones');
+      dragCont3.innerHTML = '';
+      dropCont3.innerHTML = '';
+      let items3 = shuffle([...task3.draggables]);
+      items3.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont3.appendChild(div);
+      });
+      let zones3 = shuffle([...task3.dropzones]);
+      zones3.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont3.appendChild(div);
+      });
+      
+      // Task 4
+      const task4 = gameData.people.task4;
+      const options4 = document.getElementById('people-task4-options');
+      options4.innerHTML = '';
+      let opts4 = shuffle([...task4.options]);
+      opts4.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options4.appendChild(li);
+      });
+      
+      // Hide section summary and next button
+      document.getElementById('people-section-summary').classList.add('hidden');
+      document.getElementById('people-next-btn').classList.add('hidden');
+    }
+    
+    // STRUCTURE SECTION INITIALISATION
+    function initStructurePage() {
+      // Task 1
+      const task1 = gameData.structure.task1;
+      const dragCont1 = document.getElementById('structure-task1-draggables');
+      const dropCont1 = document.getElementById('structure-task1-dropzones');
+      dragCont1.innerHTML = '';
+      dropCont1.innerHTML = '';
+      let items1 = shuffle([...task1.draggables]);
+      items1.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont1.appendChild(div);
+      });
+      let zones1 = shuffle([...task1.dropzones]);
+      zones1.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont1.appendChild(div);
+      });
+      
+      // Task 2
+      const task2 = gameData.structure.task2;
+      const options2 = document.getElementById('structure-task2-options');
+      options2.innerHTML = '';
+      let opts2 = shuffle([...task2.options]);
+      opts2.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options2.appendChild(li);
+      });
+      
+      // Task 3
+      const task3 = gameData.structure.task3;
+      const dragCont3 = document.getElementById('structure-task3-draggables');
+      const dropCont3 = document.getElementById('structure-task3-dropzones');
+      dragCont3.innerHTML = '';
+      dropCont3.innerHTML = '';
+      let items3 = shuffle([...task3.draggables]);
+      items3.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont3.appendChild(div);
+      });
+      let zones3 = shuffle([...task3.dropzones]);
+      zones3.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont3.appendChild(div);
+      });
+      
+      // Task 4
+      const task4 = gameData.structure.task4;
+      const options4 = document.getElementById('structure-task4-options');
+      options4.innerHTML = '';
+      let opts4 = shuffle([...task4.options]);
+      opts4.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options4.appendChild(li);
+      });
+      
+      document.getElementById('structure-section-summary').classList.add('hidden');
+      document.getElementById('structure-next-btn').classList.add('hidden');
+    }
+    
+    // TECHNOLOGY SECTION INITIALISATION
+    function initTechnologyPage() {
+      // Task 1
+      const task1 = gameData.technology.task1;
+      const dragCont1 = document.getElementById('technology-task1-draggables');
+      const dropCont1 = document.getElementById('technology-task1-dropzones');
+      dragCont1.innerHTML = '';
+      dropCont1.innerHTML = '';
+      let items1 = shuffle([...task1.draggables]);
+      items1.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont1.appendChild(div);
+      });
+      let zones1 = shuffle([...task1.dropzones]);
+      zones1.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont1.appendChild(div);
+      });
+      
+      // Task 2
+      const task2 = gameData.technology.task2;
+      const options2 = document.getElementById('technology-task2-options');
+      options2.innerHTML = '';
+      let opts2 = shuffle([...task2.options]);
+      opts2.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options2.appendChild(li);
+      });
+      
+      // Task 3
+      const task3 = gameData.technology.task3;
+      const dragCont3 = document.getElementById('technology-task3-draggables');
+      const dropCont3 = document.getElementById('technology-task3-dropzones');
+      dragCont3.innerHTML = '';
+      dropCont3.innerHTML = '';
+      let items3 = shuffle([...task3.draggables]);
+      items3.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont3.appendChild(div);
+      });
+      let zones3 = shuffle([...task3.dropzones]);
+      zones3.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont3.appendChild(div);
+      });
+      
+      // Task 4
+      const task4 = gameData.technology.task4;
+      const options4 = document.getElementById('technology-task4-options');
+      options4.innerHTML = '';
+      let opts4 = shuffle([...task4.options]);
+      opts4.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options4.appendChild(li);
+      });
+      
+      document.getElementById('technology-section-summary').classList.add('hidden');
+      document.getElementById('technology-next-btn').classList.add('hidden');
+    }
+    
+    // PROCESSES SECTION INITIALISATION
+    function initProcessesPage() {
+      // Task 1
+      const task1 = gameData.processes.task1;
+      const dragCont1 = document.getElementById('processes-task1-draggables');
+      const dropCont1 = document.getElementById('processes-task1-dropzones');
+      dragCont1.innerHTML = '';
+      dropCont1.innerHTML = '';
+      let items1 = shuffle([...task1.draggables]);
+      items1.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont1.appendChild(div);
+      });
+      let zones1 = shuffle([...task1.dropzones]);
+      zones1.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont1.appendChild(div);
+      });
+      
+      // Task 2
+      const task2 = gameData.processes.task2;
+      const options2 = document.getElementById('processes-task2-options');
+      options2.innerHTML = '';
+      let opts2 = shuffle([...task2.options]);
+      opts2.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options2.appendChild(li);
+      });
+      
+      // Task 3
+      const task3 = gameData.processes.task3;
+      const dragCont3 = document.getElementById('processes-task3-draggables');
+      const dropCont3 = document.getElementById('processes-task3-dropzones');
+      dragCont3.innerHTML = '';
+      dropCont3.innerHTML = '';
+      let items3 = shuffle([...task3.draggables]);
+      items3.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'draggable';
+        div.draggable = true;
+        div.textContent = item.text;
+        div.dataset.match = item.match;
+        div.addEventListener('dragstart', dragStart);
+        dragCont3.appendChild(div);
+      });
+      let zones3 = shuffle([...task3.dropzones]);
+      zones3.forEach(zone => {
+        const div = document.createElement('div');
+        div.id = zone.id;
+        div.className = 'dropzone';
+        div.textContent = zone.text;
+        div.dataset.expected = zone.text;
+        div.addEventListener('dragover', dragOver);
+        div.addEventListener('drop', drop);
+        dropCont3.appendChild(div);
+      });
+      
+      // Task 4
+      const task4 = gameData.processes.task4;
+      const options4 = document.getElementById('processes-task4-options');
+      options4.innerHTML = '';
+      let opts4 = shuffle([...task4.options]);
+      opts4.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        li.dataset.correct = option.correct;
+        li.addEventListener('click', function() {
+          let siblings = this.parentNode.children;
+          for (let s of siblings) { s.style.backgroundColor = '#e0e0e0'; }
+          this.style.backgroundColor = '#c0ffc0';
+          this.parentNode.dataset.selected = index;
+        });
+        options4.appendChild(li);
+      });
+      
+      document.getElementById('processes-section-summary').classList.add('hidden');
+      document.getElementById('processes-next-btn').classList.add('hidden');
+    }
+    
+    // Drag and Drop Handlers
+    function dragStart(e) {
+      e.dataTransfer.setData("text/plain", e.target.id);
+    }
+    
+    function dragOver(e) {
+      e.preventDefault();
+    }
+    
+    function drop(e) {
+      e.preventDefault();
+      const draggableId = e.dataTransfer.getData("text/plain");
+      const draggable = document.getElementById(draggableId);
+      // Allow drop only if dropzone is empty
+      if (e.target.classList.contains('dropzone') && e.target.children.length === 0) {
+        e.target.appendChild(draggable);
+      }
+    }
+    
+    // Submit Section: Validate answers, calculate score, show section summary and reveal Next button
+    function submitSection(section) {
+      let sectionScore = 0;
+      let summaryMsg = "";
+      
+      if (section === 'people') {
+        // Task 1: Drag and Drop
+        let correctCount1 = 0;
+        document.querySelectorAll('#people-task1-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount1++;
+            }
+          }
+        });
+        let points1 = correctCount1 * 10 - ((4 - correctCount1) * 5);
+        sectionScore += points1;
+        document.getElementById('people-task1-feedback').textContent = (correctCount1 === 4) ? "Task 1: All correct!" : "Task 1: " + correctCount1 + " correct out of 4.";
+        
+        // Task 2: Multiple Choice
+        let selected2 = document.getElementById('people-task2-options').dataset.selected;
+        let points2 = 0;
+        if (selected2 !== undefined) {
+          let option = document.getElementById('people-task2-options').children[selected2];
+          if (option && option.dataset.correct === "true") {
+            points2 = 10;
+            document.getElementById('people-task2-feedback').textContent = "Task 2: Correct!";
+          } else {
+            points2 = -5;
+            document.getElementById('people-task2-feedback').textContent = "Task 2: Incorrect.";
+          }
+        } else {
+          document.getElementById('people-task2-feedback').textContent = "Task 2: No option selected.";
+        }
+        sectionScore += points2;
+        
+        // Task 3: Drag and Drop
+        let correctCount3 = 0;
+        document.querySelectorAll('#people-task3-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount3++;
+            }
+          }
+        });
+        let points3 = correctCount3 * 10 - ((4 - correctCount3) * 5);
+        sectionScore += points3;
+        document.getElementById('people-task3-feedback').textContent = (correctCount3 === 4) ? "Task 3: All correct!" : "Task 3: " + correctCount3 + " correct out of 4.";
+        
+        // Task 4: Multiple Choice
+        let selected4 = document.getElementById('people-task4-options').dataset.selected;
+        let points4 = 0;
+        if (selected4 !== undefined) {
+          let option = document.getElementById('people-task4-options').children[selected4];
+          if (option && option.dataset.correct === "true") {
+            points4 = 10;
+            document.getElementById('people-task4-feedback').textContent = "Task 4: Correct!";
+          } else {
+            points4 = -5;
+            document.getElementById('people-task4-feedback').textContent = "Task 4: Incorrect.";
+          }
+        } else {
+          document.getElementById('people-task4-feedback').textContent = "Task 4: No option selected.";
+        }
+        sectionScore += points4;
+        
+        totalScore += sectionScore;
+        summaryMsg = "People Section Score: " + sectionScore + ". ";
+        summaryMsg += (sectionScore >= 30) ? "Excellent work on managing your team!" : "Review your people management strategies.";
+        document.getElementById('people-section-summary').textContent = summaryMsg;
+        document.getElementById('people-section-summary').classList.remove('hidden');
+        document.getElementById('people-next-btn').classList.remove('hidden');
+      }
+      else if (section === 'structure') {
+        // Task 1
+        let correctCount1 = 0;
+        document.querySelectorAll('#structure-task1-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount1++;
+            }
+          }
+        });
+        let points1 = correctCount1 * 10 - ((4 - correctCount1) * 5);
+        sectionScore += points1;
+        document.getElementById('structure-task1-feedback').textContent = (correctCount1 === 4) ? "Task 1: All correct!" : "Task 1: " + correctCount1 + " correct out of 4.";
+        
+        // Task 2
+        let selected2 = document.getElementById('structure-task2-options').dataset.selected;
+        let points2 = 0;
+        if (selected2 !== undefined) {
+          let option = document.getElementById('structure-task2-options').children[selected2];
+          if (option && option.dataset.correct === "true") {
+            points2 = 10;
+            document.getElementById('structure-task2-feedback').textContent = "Task 2: Correct!";
+          } else {
+            points2 = -5;
+            document.getElementById('structure-task2-feedback').textContent = "Task 2: Incorrect.";
+          }
+        } else {
+          document.getElementById('structure-task2-feedback').textContent = "Task 2: No option selected.";
+        }
+        sectionScore += points2;
+        
+        // Task 3
+        let correctCount3 = 0;
+        document.querySelectorAll('#structure-task3-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount3++;
+            }
+          }
+        });
+        let points3 = correctCount3 * 10 - ((4 - correctCount3) * 5);
+        sectionScore += points3;
+        document.getElementById('structure-task3-feedback').textContent = (correctCount3 === 4) ? "Task 3: All correct!" : "Task 3: " + correctCount3 + " correct out of 4.";
+        
+        // Task 4
+        let selected4 = document.getElementById('structure-task4-options').dataset.selected;
+        let points4 = 0;
+        if (selected4 !== undefined) {
+          let option = document.getElementById('structure-task4-options').children[selected4];
+          if (option && option.dataset.correct === "true") {
+            points4 = 10;
+            document.getElementById('structure-task4-feedback').textContent = "Task 4: Correct!";
+          } else {
+            points4 = -5;
+            document.getElementById('structure-task4-feedback').textContent = "Task 4: Incorrect.";
+          }
+        } else {
+          document.getElementById('structure-task4-feedback').textContent = "Task 4: No option selected.";
+        }
+        sectionScore += points4;
+        
+        totalScore += sectionScore;
+        summaryMsg = "Structure Section Score: " + sectionScore + ". ";
+        summaryMsg += (sectionScore >= 30) ? "Excellent reorganisation!" : "Review your organisational design choices.";
+        document.getElementById('structure-section-summary').textContent = summaryMsg;
+        document.getElementById('structure-section-summary').classList.remove('hidden');
+        document.getElementById('structure-next-btn').classList.remove('hidden');
+      }
+      else if (section === 'technology') {
+        // Task 1
+        let correctCount1 = 0;
+        document.querySelectorAll('#technology-task1-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount1++;
+            }
+          }
+        });
+        let points1 = correctCount1 * 10 - ((4 - correctCount1) * 5);
+        sectionScore += points1;
+        document.getElementById('technology-task1-feedback').textContent = (correctCount1 === 4) ? "Task 1: All correct!" : "Task 1: " + correctCount1 + " correct out of 4.";
+        
+        // Task 2
+        let selected2 = document.getElementById('technology-task2-options').dataset.selected;
+        let points2 = 0;
+        if (selected2 !== undefined) {
+          let option = document.getElementById('technology-task2-options').children[selected2];
+          if (option && option.dataset.correct === "true") {
+            points2 = 10;
+            document.getElementById('technology-task2-feedback').textContent = "Task 2: Correct!";
+          } else {
+            points2 = -5;
+            document.getElementById('technology-task2-feedback').textContent = "Task 2: Incorrect.";
+          }
+        } else {
+          document.getElementById('technology-task2-feedback').textContent = "Task 2: No option selected.";
+        }
+        sectionScore += points2;
+        
+        // Task 3
+        let correctCount3 = 0;
+        document.querySelectorAll('#technology-task3-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount3++;
+            }
+          }
+        });
+        let points3 = correctCount3 * 10 - ((4 - correctCount3) * 5);
+        sectionScore += points3;
+        document.getElementById('technology-task3-feedback').textContent = (correctCount3 === 4) ? "Task 3: All correct!" : "Task 3: " + correctCount3 + " correct out of 4.";
+        
+        // Task 4
+        let selected4 = document.getElementById('technology-task4-options').dataset.selected;
+        let points4 = 0;
+        if (selected4 !== undefined) {
+          let option = document.getElementById('technology-task4-options').children[selected4];
+          if (option && option.dataset.correct === "true") {
+            points4 = 10;
+            document.getElementById('technology-task4-feedback').textContent = "Task 4: Correct!";
+          } else {
+            points4 = -5;
+            document.getElementById('technology-task4-feedback').textContent = "Task 4: Incorrect.";
+          }
+        } else {
+          document.getElementById('technology-task4-feedback').textContent = "Task 4: No option selected.";
+        }
+        sectionScore += points4;
+        
+        totalScore += sectionScore;
+        summaryMsg = "Technology Section Score: " + sectionScore + ". ";
+        summaryMsg += (sectionScore >= 30) ? "Excellent selection of digital tools!" : "Re-evaluate your technological choices.";
+        document.getElementById('technology-section-summary').textContent = summaryMsg;
+        document.getElementById('technology-section-summary').classList.remove('hidden');
+        document.getElementById('technology-next-btn').classList.remove('hidden');
+      }
+      else if (section === 'processes') {
+        // Task 1
+        let correctCount1 = 0;
+        document.querySelectorAll('#processes-task1-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount1++;
+            }
+          }
+        });
+        let points1 = correctCount1 * 10 - ((4 - correctCount1) * 5);
+        sectionScore += points1;
+        document.getElementById('processes-task1-feedback').textContent = (correctCount1 === 4) ? "Task 1: All correct!" : "Task 1: " + correctCount1 + " correct out of 4.";
+        
+        // Task 2
+        let selected2 = document.getElementById('processes-task2-options').dataset.selected;
+        let points2 = 0;
+        if (selected2 !== undefined) {
+          let option = document.getElementById('processes-task2-options').children[selected2];
+          if (option && option.dataset.correct === "true") {
+            points2 = 10;
+            document.getElementById('processes-task2-feedback').textContent = "Task 2: Correct!";
+          } else {
+            points2 = -5;
+            document.getElementById('processes-task2-feedback').textContent = "Task 2: Incorrect.";
+          }
+        } else {
+          document.getElementById('processes-task2-feedback').textContent = "Task 2: No option selected.";
+        }
+        sectionScore += points2;
+        
+        // Task 3
+        let correctCount3 = 0;
+        document.querySelectorAll('#processes-task3-dropzones .dropzone').forEach(zone => {
+          if (zone.children.length > 0) {
+            let child = zone.children[0];
+            if (child.dataset.match === zone.dataset.expected) {
+              correctCount3++;
+            }
+          }
+        });
+        let points3 = correctCount3 * 10 - ((4 - correctCount3) * 5);
+        sectionScore += points3;
+        document.getElementById('processes-task3-feedback').textContent = (correctCount3 === 4) ? "Task 3: All correct!" : "Task 3: " + correctCount3 + " correct out of 4.";
+        
+        // Task 4
+        let selected4 = document.getElementById('processes-task4-options').dataset.selected;
+        let points4 = 0;
+        if (selected4 !== undefined) {
+          let option = document.getElementById('processes-task4-options').children[selected4];
+          if (option && option.dataset.correct === "true") {
+            points4 = 10;
+            document.getElementById('processes-task4-feedback').textContent = "Task 4: Correct!";
+          } else {
+            points4 = -5;
+            document.getElementById('processes-task4-feedback').textContent = "Task 4: Incorrect.";
+          }
+        } else {
+          document.getElementById('processes-task4-feedback').textContent = "Task 4: No option selected.";
+        }
+        sectionScore += points4;
+        
+        totalScore += sectionScore;
+        summaryMsg = "Processes Section Score: " + sectionScore + ". ";
+        summaryMsg += (sectionScore >= 30) ? "Excellent process optimisation!" : "Review your process improvement strategies.";
+        document.getElementById('processes-section-summary').textContent = summaryMsg;
+        document.getElementById('processes-section-summary').classList.remove('hidden');
+        document.getElementById('processes-next-btn').classList.remove('hidden');
+      }
+    }
+    
+    // Function to proceed to the next section
+    function goToNextSection(current) {
+      if (current === 'people') {
+        initStructurePage();
+        showPage('page-structure');
+      } else if (current === 'structure') {
+        initTechnologyPage();
+        showPage('page-technology');
+      } else if (current === 'technology') {
+        initProcessesPage();
+        showPage('page-processes');
+      } else if (current === 'processes') {
+        showFinalScore();
+      }
+    }
+    
+    function showFinalScore() {
+      showPage('page-final');
+      document.getElementById('final-score').textContent = "Your Total Score: " + totalScore;
+      let feedback = "";
+      if (totalScore >= 120) {
+        feedback = "Outstanding performance! You have demonstrated a deep understanding of how Leavitt’s Diamond Model drives digital transformation.";
+      } else if (totalScore >= 80) {
+        feedback = "Good job, but there's room for improvement. Review some areas of the model for a more balanced transformation.";
+      } else {
+        feedback = "Needs improvement. Revisit the model and strategic adjustments to fully support digital change.";
+      }
+      document.getElementById('final-feedback').textContent = feedback;
+    }
+    
+    function restartGame() {
+      totalScore = 0;
+      // Optionally, reinitialize all sections
+      showPage('page-intro');
+    }
+  </script>
+</body>
+</html>
+
